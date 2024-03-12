@@ -1,17 +1,19 @@
 import PropTypes from 'prop-types';
 import style from './ContentPost.module.css';
-
+import { Text } from '../../../../../UI/Text';
 
 export const ContentPost = ({ content }) => {
   const { title, author } = content;
   return (
     <div className={style.content}>
-      <h2 className={style.tittle}>
-        <a className={style.linkPost} href='#post'>
+      <Text As='h2' className={style.tittle}>
+        <Text As='a' size={18} tsize={24}
+          className={style.linkPost} href='#post'>
           {title}
-        </a>
-      </h2>
-      <a className={style.linkAuthor} href='#/author'>{author}</a>
+        </Text>
+      </Text>
+      <Text As='a' color='orange' size={12} tsize={14}
+        className={style.linkAuthor} href='#/author'>{author}</Text>
     </div>
   );
 };

@@ -3,21 +3,23 @@ import style from './Tabs.module.css';
 import assignId from '../../../utils/randomID';
 import { ReactComponent as ArrowIcon } from './img/arrow.svg';
 import { ReactComponent as HomeIcon } from './img/home.svg';
-import { ReactComponent as PostIcon } from './img/post.svg';
-import { ReactComponent as SaveIcon } from './img/save.svg';
-import { ReactComponent as EyeIcon } from './img/eye.svg';
+import { ReactComponent as HotIcon } from './img/hot.svg';
+import { ReactComponent as TopIcon } from './img/top.svg';
+import { ReactComponent as BestIcon } from './img/best.svg';
 import debounceRaf from '../../../utils/debounce';
+import { Text } from '../../../UI/Text';
 
 const LIST = [
   { value: 'Главная', Icon: HomeIcon },
-  { value: 'Просмотренные', Icon: PostIcon },
-  { value: 'Сохраненые', Icon: SaveIcon },
-  { value: 'Мои посты', Icon: EyeIcon }
+  { value: 'Топ', Icon: TopIcon },
+  { value: 'Лучшее', Icon: BestIcon },
+  { value: 'Горячее', Icon: HotIcon }
 ].map(assignId);
 
 export const Tabs = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdown, setIsDropdown] = useState(true);
+  const [dropDownMenu, setDropdownMenu] = useState('open');
 
   const handleResize = () => {
     if (document.documentElement.clientWidth < 768) {
@@ -25,6 +27,11 @@ export const Tabs = () => {
     } else {
       setIsDropdown(false);
     }
+  };
+
+  const changeMenu = (text) => {
+    setDropdownMenu(text);
+    setIsDropdownOpen(false);
   };
 
   useEffect(() => {
@@ -42,7 +49,7 @@ export const Tabs = () => {
           className={style.btn}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          open
+          <Text >{dropDownMenu}</Text>
           <ArrowIcon />
         </button>
       </div>)}
@@ -51,7 +58,10 @@ export const Tabs = () => {
         {
           LIST.map(({ value, id, Icon }) => (
             <li className={style.item} key={id}>
-              <button className={style.btn} onClick={() => { }}>{value}
+              <button className={style.btn}
+                onClick={() => {
+                  changeMenu(value);
+                }}><Text>{value}</Text>
                 <Icon width={30} height={30} />
               </button>
             </li>
