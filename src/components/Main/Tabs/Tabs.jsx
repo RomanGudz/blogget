@@ -19,7 +19,7 @@ const LIST = [
 export const Tabs = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdown, setIsDropdown] = useState(true);
-  const [dropDownMenu, setDropdownMenu] = useState('open');
+  const [dropDownMenu, setDropdownMenu] = useState(LIST[0].value);
 
   const handleResize = () => {
     if (document.documentElement.clientWidth < 768) {
