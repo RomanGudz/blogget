@@ -9,7 +9,6 @@ import BtnDelete from './BtnDelete';
 
 
 export const Post = ({ postData }) => {
-  console.log(postData);
   const { title, author, ups, created } = postData;
 
   return (
