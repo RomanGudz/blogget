@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { URL } from '../API/const';
+import { tokenContext } from '../context/tokenContext';
 
-export const useAuth = (token, delToken) => {
+export const useAuth = () => {
   const [auth, setAuth] = useState({});
+  const { token, delToken } = useContext(tokenContext);
 
   useEffect(() => {
     if (!token) return;
@@ -25,6 +27,7 @@ export const useAuth = (token, delToken) => {
       .catch((err) => {
         console.log(err);
         setAuth({});
+        delToken();
       });
   }, [token]);
 
