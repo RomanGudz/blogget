@@ -11,5 +11,5 @@ export const Time = ({ time }) => (
   </time>);
 
 Time.propTypes = {
-  time: PropTypes.string,
+  time: PropTypes.number,
 };
