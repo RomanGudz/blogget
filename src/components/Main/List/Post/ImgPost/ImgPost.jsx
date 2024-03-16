@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export const ImgPost = ({ img }) =>
   <img
     className={style.img}
-    src={img && img.endsWith('.jpg') ? img : notphoto}
+    src={img && /\.(jpg|jpeg)$/.test(img) ? img : notphoto}
     alt='title'
   />;
 

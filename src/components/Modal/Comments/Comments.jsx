@@ -2,18 +2,22 @@ import React from 'react';
 import style from './Comments.module.css';
 import { Text } from '../../../UI/Text';
 import Time from '../../Main/List/Post/Time';
+import PropTypes from 'prop-types';
 
-export const Comments = () => {
-  console.log();
-  return (<ul className={style.list}>
-    <li className={style.item}>
-      <Text className={style.author} size={18} tsize={22}>Maks</Text>
-      <Text className={style.comment} size={14} tsize={18}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Fugiat natus eaque modi!</Text>
-      <Time
-      // date={date}
-      />
-    </li>
-  </ul>);
+export const Comments = ({ comments }) => (<ul className={style.list}>
+  {comments.map((comment) =>
+    <li key={comment.id} className={style.item}>
+      <Text As='h3'
+        className={style.author}
+        size={18} tsize={22}>
+        {comment.author}</Text>
+      <Text As='p' className={style.comment}
+        size={14} tsize={18}>{comment.body}</Text>
+      <Time time={comment.created} />
+    </li>)
+  }
+</ul>);
+
+Comments.propTypes = {
+  comments: PropTypes.array,
 };

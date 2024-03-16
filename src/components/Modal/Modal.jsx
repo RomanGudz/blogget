@@ -7,17 +7,17 @@ import { useEffect, useRef, useState } from 'react';
 import { useCommentsData } from '../../hooks/useCommentsData';
 import FormComment from './FormComment';
 import Comments from './Comments';
+import ImgPost from '../Main/List/Post/ImgPost';
 
 export const Modal = ({ closeModal, id }) => {
   const overlayRef = useRef(null);
   const btnRef = useRef(null);
-  const [post] = useCommentsData(id);
+  const [post, comments] = useCommentsData(id);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (post) {
       setIsLoaded(true);
-      console.log(post);
     }
   }, [post]);
 
@@ -48,11 +48,11 @@ export const Modal = ({ closeModal, id }) => {
     ReactDOM.createPortal(
       <div className={style.overlay} ref={overlayRef}>
         <div className={style.modal}>
-          {isLoaded ? (
+          {post && isLoaded ? (
             <>
               <h2 className={style.title}>{post.title}</h2>
               <div className={style.content}>
-                <Markdown options={{
+                {post.markdown ? <Markdown options={{
                   overrides: {
                     a: {
                       props: {
@@ -60,11 +60,11 @@ export const Modal = ({ closeModal, id }) => {
                       }
                     }
                   }
-                }}>{post.markdown}</Markdown>
+                }}>{post.markdown}</Markdown> : <ImgPost img={post.url} />}
               </div>
               <p className={style.author}>{post.author}</p>
               <FormComment />
-              <Comments />
+              <Comments comments={comments} />
             </>
           ) : (
             <h2 className={style.title}>Загрузка...</h2>

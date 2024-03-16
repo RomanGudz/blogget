@@ -15,7 +15,6 @@ export const Auth = () => {
     delToken();
     setLogout(!logout);
   };
-
   return (
     <div className={style.container}>
       {auth.name ? (
