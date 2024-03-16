@@ -11,7 +11,7 @@ export const FormComment = () => {
     if (texAreaRef.current) {
       texAreaRef.current.focus();
     }
-  }, []);
+  }, [isForm]);
   return (
     isForm ? (<form className={style.form}>
       <Text As='h3' size={14} tsize={18}>Имя пользователя {auth.name}</Text>
