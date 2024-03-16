@@ -12,8 +12,13 @@ export const FormComment = () => {
       texAreaRef.current.focus();
     }
   }, [isForm]);
+
+  const submitForm = e => {
+    e.preventDefault();
+    console.log(texAreaRef.current.value);
+  };
   return (
-    isForm ? (<form className={style.form}>
+    isForm ? (<form className={style.form} onSubmit={submitForm}>
       <Text As='h3' size={14} tsize={18}>Имя пользователя {auth.name}</Text>
       <textarea className={style.textarea} ref={texAreaRef}></textarea>
       <button className={style.btn}>Отправить</button>
