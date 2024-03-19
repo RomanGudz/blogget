@@ -1,18 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { postDataAsync } from '../store/postData/action';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const bestPosts = () => {
-  const [posts, setBestPosts] = useState([]);
-
+  const posts = useSelector(state => state.postData.data);
+  const dispatch = useDispatch();
   useEffect(() => {
-    fetch(`https://www.reddit.com/best/.json`).then(response => response.json())
-      .then(({ data }) => {
-        setBestPosts(data.children);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(postDataAsync());
   }, []);
 
   return [posts];
 };
-

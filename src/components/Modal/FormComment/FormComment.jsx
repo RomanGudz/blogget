@@ -1,16 +1,16 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import style from './FormComment.module.css';
 import { Text } from '../../../UI/Text';
-import { authContext } from '../../../context/authContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { upDateComment } from '../../../store';
+import { upDateComment } from '../../../store/commentReducer';
+import { useAuth } from '../../../hooks/useAuth';
 
 
 export const FormComment = () => {
-  const value = useSelector(state => state.comment);
+  const value = useSelector(state => state.commentReducer.comment);
   const dispatch = useDispatch();
   const [isForm, setIsForm] = useState(false);
-  const { auth } = useContext(authContext);
+  const [auth] = useAuth();
   const handleChange = e => {
     dispatch(upDateComment(e.target.value));
   };

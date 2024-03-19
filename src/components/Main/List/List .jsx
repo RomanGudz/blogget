@@ -1,10 +1,9 @@
-import { useContext } from 'react';
 import style from './List .module.css';
 import Post from './Post';
-import { postsContext } from '../../../context/postsContext';
+import { bestPosts } from '../../../hooks/bestPosts';
 
 export const List = () => {
-  const { posts } = useContext(postsContext);
+  const [posts] = bestPosts();
   return (
     <ul className={style.list}>
       {posts.map(({ data }) => (<Post key={data.id} postData={data} />))}

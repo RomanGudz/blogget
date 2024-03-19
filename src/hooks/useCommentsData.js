@@ -1,37 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { commentsDataAsync } from '../store/comments/action';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const useCommentsData = (id) => {
-  const [[post, comments], setCommentsData] = useState([]);
-
+  const [post, comments] = useSelector(state => state.comments.data);
+  const status = useSelector(state => state.comments.status);
+  const dispatch = useDispatch();
   useEffect(() => {
-    fetch(`https://oauth.reddit.com/comments/${id}.json`).then((response) => {
-      if (response.status === 401) {
-        throw new Error(response.status);
-      }
-      return response.json();
-    })
-      .then(
-        ([
-          {
-            data: {
-              children: [{ data: post }],
-            },
-          },
-          {
-            data: {
-              children,
-            },
-          },
-        ]) => {
-          const comments = children.map(item => item.data);
-
-          setCommentsData([post, comments]);
-        },
-      )
-      .catch((err) => {
-        console.error(err);
-      });
+    dispatch(commentsDataAsync(id));
   }, []);
 
-  return [post, comments];
+  return [post, comments, status];
 };

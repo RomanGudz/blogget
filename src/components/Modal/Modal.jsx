@@ -8,11 +8,13 @@ import { useCommentsData } from '../../hooks/useCommentsData';
 import FormComment from './FormComment';
 import Comments from './Comments';
 import ImgPost from '../Main/List/Post/ImgPost';
+import { Preloader } from '../../UI/Preloader/Preloader';
+import RingLoader from 'react-spinners/RingLoader';
 
 export const Modal = ({ closeModal, id }) => {
   const overlayRef = useRef(null);
   const btnRef = useRef(null);
-  const [post, comments] = useCommentsData(id);
+  const [post, comments, status] = useCommentsData(id);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -67,7 +69,10 @@ export const Modal = ({ closeModal, id }) => {
               <Comments comments={comments} />
             </>
           ) : (
-            <h2 className={style.title}>Загрузка...</h2>
+            <><Preloader As={RingLoader} />
+              <h2 className={style.title}>
+                {status === 'loading' && 'Загрузка...'}
+                {status === 'error' && 'Ошибка'}</h2></>
           )}
           <button className={style.close} onClick={closeModal}>
             <CloseIcon ref={btnRef} />

@@ -1,16 +1,17 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import style from './Auth.module.css';
 import { ReactComponent as AuthIcon } from './img/login.svg';
 import { Text } from '../../../UI/Text';
 import { urlAuth } from '../../../API/auth';
-import { authContext } from '../../../context/authContext';
 import { useDispatch } from 'react-redux';
-import { deleteToken } from '../../../store';
+import { deleteToken } from '../../../store/tokenReducer';
+import { useAuth } from '../../../hooks/useAuth';
+import AuthLoader from './AuthLoader';
 
 
 export const Auth = () => {
   const [logout, setLogout] = useState(false);
-  const { auth } = useContext(authContext);
+  const [auth, loading] = useAuth();
   const dispatch = useDispatch();
 
   const logoutUser = () => {
@@ -19,7 +20,9 @@ export const Auth = () => {
   };
   return (
     <div className={style.container}>
-      {auth.name ? (
+      {loading ? (
+        <AuthLoader />
+      ) : auth.name ? (
         <button className={style.btn} onClick={() => {
           setLogout(!logout);
         }}>
