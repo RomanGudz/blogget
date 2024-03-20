@@ -8,10 +8,9 @@ export const getToken = () => {
     token = new URLSearchParams(location.hash.substring(1))
       .get('access_token');
     setToken(token);
+    return token;
   }
   if (localStorage.getItem('bearer')) {
-    setToken(localStorage.getItem('bearer'));
+    return localStorage.getItem('bearer');
   }
-
-  return token;
 };

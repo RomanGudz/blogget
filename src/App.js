@@ -3,12 +3,23 @@ import Main from './components/Main';
 import { useDispatch } from 'react-redux';
 import { updateToken } from './store/tokenReducer';
 import { getToken } from './hooks/token';
+import { Route, Routes } from 'react-router-dom';
 
 
 const App = () => {
   const dispatch = useDispatch();
   dispatch(updateToken(getToken()));
-  return (<><Header /><Main /></>);
+  return (
+    <Routes>
+      <Route path='*' element={
+        <>
+          <Header />
+          <Main />
+        </>
+      } />
+
+    </Routes>
+  );
 };
 
 export default App;

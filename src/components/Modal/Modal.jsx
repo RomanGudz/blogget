@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom';
 import style from './Modal.module.css';
 import { ReactComponent as CloseIcon } from './img/close.svg';
-import PropTypes from 'prop-types';
 import Markdown from 'markdown-to-jsx';
 import { useEffect, useRef, useState } from 'react';
 import { useCommentsData } from '../../hooks/useCommentsData';
@@ -10,8 +9,11 @@ import Comments from './Comments';
 import ImgPost from '../Main/List/Post/ImgPost';
 import { Preloader } from '../../UI/Preloader/Preloader';
 import RingLoader from 'react-spinners/RingLoader';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export const Modal = ({ closeModal, id }) => {
+export const Modal = () => {
+  const { id, page } = useParams();
+  const navigate = useNavigate();
   const overlayRef = useRef(null);
   const btnRef = useRef(null);
   const [post, comments, status] = useCommentsData(id);
@@ -26,15 +28,15 @@ export const Modal = ({ closeModal, id }) => {
   const handleClick = e => {
     const target = e.target;
     if (target === overlayRef.current) {
-      closeModal();
+      navigate(`/category/${page}`);
     }
     if (target === btnRef.current) {
-      closeModal();
+      navigate(`/category/${page}`);
     }
   };
   const handleKeyDown = e => {
     if (e.key === 'Escape') {
-      closeModal();
+      navigate(`/category/${page}`);
     }
   };
   useEffect(() => {
@@ -74,7 +76,11 @@ export const Modal = ({ closeModal, id }) => {
                 {status === 'loading' && 'Загрузка...'}
                 {status === 'error' && 'Ошибка'}</h2></>
           )}
-          <button className={style.close} onClick={closeModal}>
+          <button className={style.close}
+            onClick={() => {
+              navigate(`/category/${page}`);
+            }}
+          >
             <CloseIcon ref={btnRef} />
           </button>
         </div>
@@ -82,9 +88,4 @@ export const Modal = ({ closeModal, id }) => {
       document.getElementById('modal-root')
     )
   );
-};
-
-Modal.propTypes = {
-  closeModal: PropTypes.func,
-  id: PropTypes.string,
 };

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export const Preloader = prop => {
   const {
     As = '',
-    color = 'orange',
+    // color = 'orange',
     size,
     tsize,
     dsize,
@@ -14,7 +14,7 @@ export const Preloader = prop => {
   } = prop;
   const classes = classNames(
     className,
-    style[color],
+    // style[color],
     style[`fs${size}`],
     { [style.center]: center },
     { [style[`fst${tsize}`]]: tsize },
@@ -25,7 +25,7 @@ export const Preloader = prop => {
 
 Preloader.propTypes = {
   As: PropTypes.func,
-  color: PropTypes.string,
+  // color: PropTypes.string,
   size: PropTypes.number,
   tsize: PropTypes.number,
   dsize: PropTypes.number,
