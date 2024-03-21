@@ -1,63 +1,37 @@
 import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { changePage, postDataRequest } from './postDataSlice';
 
-export const POST_DATA_REQUEST = 'POST_DATA_REQUEST';
-export const POST_DATA_SUCCESS = 'POST_DATA_SUCCESS';
-export const POST_DATA_ERROR = 'POST_DATA_ERROR';
-export const POST_DATA_SUCCESS_AFTER = 'POST_DATA_SUCCESS_AFTER';
-export const CHANGE_PAGE = 'CHANGE_PAGE';
+export const postDataAsync = createAsyncThunk(
+  'postData/fetch',
+  async (newPage, { getState, dispatch }) => {
+    let page = getState().postData.page;
+    const dataPostsOld = getState().postData.data;
+    if (newPage) {
+      page = newPage;
+      dispatch(changePage(page));
+    }
+    const token = getState().tokenReducer.token;
+    const after = getState().postData.after;
+    const loading = getState().postData.loading;
+    const isLast = getState().postData.isLast;
 
-const postDataRequest = () => ({
-  type: POST_DATA_REQUEST,
-});
-
-const postDataSuccess = (data) => ({
-  type: POST_DATA_SUCCESS,
-  data: data.children,
-  after: data.after
-});
-
-const postDataSuccessAfter = (data) => ({
-  type: POST_DATA_SUCCESS_AFTER,
-  data: data.children,
-  after: data.after
-});
-
-const postDataError = (error) => ({
-  type: POST_DATA_ERROR,
-  error
-});
-
-export const changePage = (page) => ({
-  type: CHANGE_PAGE,
-  page
-});
-
-export const postDataAsync = (newPage) => (dispatch, getState) => {
-  let page = getState().postData.page;
-  if (newPage) {
-    page = newPage;
-    dispatch(changePage(page));
-  }
-  const token = getState().tokenReducer.token;
-  const after = getState().postData.after;
-  const loading = getState().postData.loading;
-  const isLast = getState().postData.isLast;
-
-  if (!token || loading || isLast) return;
-  dispatch(postDataRequest());
-  axios(`https://oauth.reddit.com/${page}?limit=10&${after ? `after=${after}` : ''}.json`, {
-    headers: {
-      Authorization: `bearer ${token}`,
-    },
-  })
-    .then(({ data: { data } }) => {
+    dispatch(postDataRequest());
+    if (!token || isLast || loading) return;
+    try {
+      const response = await axios(`https://oauth.reddit.com/${page}?limit=10&${after ? `after=${after}` : ''}.json`, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      });
+      const data = { ...response.data };
       if (after) {
-        dispatch(postDataSuccessAfter(data));
+        return [[...data.data.children, ...dataPostsOld], data.data.after];
       } else {
-        dispatch(postDataSuccess(data));
+        return [data.data.children, data.data.after];
       }
-    })
-    .catch((err) => {
-      dispatch(postDataError(err.toString()));
-    });
-};
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  });
