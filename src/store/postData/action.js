@@ -14,10 +14,11 @@ export const postDataAsync = createAsyncThunk(
     const token = getState().tokenReducer.token;
     const after = getState().postData.after;
     const loading = getState().postData.loading;
+    console.log('loading: ', loading);
     const isLast = getState().postData.isLast;
 
+    if (!token || loading || isLast) return;
     dispatch(postDataRequest());
-    if (!token || isLast || loading) return;
     try {
       const response = await axios(`https://oauth.reddit.com/${page}?limit=10&${after ? `after=${after}` : ''}.json`, {
         headers: {
@@ -26,7 +27,7 @@ export const postDataAsync = createAsyncThunk(
       });
       const data = { ...response.data };
       if (after) {
-        return [[...data.data.children, ...dataPostsOld], data.data.after];
+        return [[...dataPostsOld, ...data.data.children], data.data.after];
       } else {
         return [data.data.children, data.data.after];
       }
