@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { URL } from '../../API/const';
 import { changePage, postDataRequest } from './postDataSlice';
 
 export const postDataAsync = createAsyncThunk(
@@ -20,11 +21,13 @@ export const postDataAsync = createAsyncThunk(
     if (!token || loading || isLast) return;
     dispatch(postDataRequest());
     try {
-      const response = await axios(`https://oauth.reddit.com/${page}?limit=10&${after ? `after=${after}` : ''}.json`, {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      });
+      const response = await axios(
+        `${URL}/${page}?limit=5&${after ? `after=${after}` : ''}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        });
       const data = { ...response.data };
       if (after) {
         return [[...dataPostsOld, ...data.data.children], data.data.after];
