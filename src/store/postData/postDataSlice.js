@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { postDataAsync } from './action';
 
 const initialState = {
   loading: false,
@@ -18,28 +17,33 @@ export const postDataSlise = createSlice({
       state.page = action.payload;
       state.after = '';
       state.isLast = false;
+      state.data = [];
     },
     postDataRequest: (state) => {
+      state.loading = false;
+    },
+    postDataLoading: (state) => {
       state.loading = true;
+    },
+    postDataSuccess: (state, action) => {
+      state.loading = false;
+      state.data = action.payload[0];
+      state.after = action.payload[1];
+      state.isLast = !action.payload[1];
+    },
+    postDataError: (state, error) => {
+      state.loading = false;
+      state.error = error;
     }
-  },
-  extraReducers: builder => {
-    builder
-      .addCase(postDataAsync.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.loading = false;
-          state.data = action.payload[0];
-          state.after = action.payload[1];
-          state.isLast = !action.payload[1];
-        }
-      })
-      .addCase(postDataAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.error;
-      });
   }
 });
 
-export const { changePage, postDataRequest } = postDataSlise.actions;
+export const {
+  changePage,
+  postDataRequest,
+  postDataSuccess,
+  postDataError,
+  postDataLoading
+} = postDataSlise.actions;
 
 export default postDataSlise.reducer;

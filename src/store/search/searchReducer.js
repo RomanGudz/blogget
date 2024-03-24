@@ -1,7 +1,8 @@
 import {
   SEARCH_REQUEST,
   SEARCH_REQUEST_ERROR,
-  SEARCH_REQUEST_SUCCESS
+  SEARCH_REQUEST_SUCCESS,
+  SEARCH_REQUEST_SUCCESS_AFTER
 } from './searchAction';
 
 const initialState = {
@@ -10,7 +11,7 @@ const initialState = {
   error: '',
   after: '',
   isLast: '',
-  page: '',
+  search: '',
 };
 
 export const searchReducer = (state = initialState, action) => {
@@ -26,7 +27,17 @@ export const searchReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         posts: action.children,
-        after: action.after
+        after: action.after,
+        search: action.search
+      };
+    case SEARCH_REQUEST_SUCCESS_AFTER:
+      console.log(action);
+      return {
+        ...state,
+        loading: false,
+        posts: [...state.posts, ...action.children],
+        after: action.after,
+        search: action.search
       };
     case SEARCH_REQUEST_ERROR:
       return {

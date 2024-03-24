@@ -9,6 +9,8 @@ import { ReactComponent as BestIcon } from './img/best.svg';
 import debounceRaf from '../../../utils/debounce';
 import { Text } from '../../../UI/Text';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changePage } from '../../../store/postData/postDataSlice';
 
 const LIST = [
   { value: 'Главная', Icon: HomeIcon, link: 'rising' },
@@ -22,7 +24,7 @@ export const Tabs = () => {
   const [isDropdown, setIsDropdown] = useState(true);
   const [dropDownMenu, setDropdownMenu] = useState(LIST[0].value);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleResize = () => {
     if (document.documentElement.clientWidth < 768) {
       setIsDropdown(true);
@@ -31,7 +33,9 @@ export const Tabs = () => {
     }
   };
 
-  const changeMenu = (text) => {
+
+  const changeMenu = (text, link) => {
+    dispatch(changePage(link));
     setDropdownMenu(text);
     setIsDropdownOpen(false);
   };
@@ -62,7 +66,7 @@ export const Tabs = () => {
             <li className={style.item} key={id}>
               <button className={style.btn}
                 onClick={() => {
-                  changeMenu(value);
+                  changeMenu(value, link);
                   navigate(`/category/${link}`);
                 }}><Text>{value}</Text>
                 <Icon width={30} height={30} />
